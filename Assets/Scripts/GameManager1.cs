@@ -52,13 +52,9 @@ public class GameManager1 : MonoBehaviour
 
     private void Awake()
     {
-        int colorIndex = PlayerPrefs.GetInt("colorIndex");
+        int colorIndex = PlayerPrefs.GetInt("Ball");
         GameObject GO = Instantiate(ballPrefabs[colorIndex]);
-        ball = GO.GetComponent<Ball>();
-
-        Canvas canvas1 = canvas.gameObject.GetComponent<Canvas>();
-        Score.transform.position = new Vector3(canvas.position.x - (canvas1.pixelRect.width/2), canvas.position.y);
-    }
+        ball = GO.GetComponent<Ball>();    }
 
     private void Update()
     {
@@ -125,7 +121,29 @@ public class GameManager1 : MonoBehaviour
         sessionTime = 0f;
         gameOverPanel.SetActive(true);
         paddle.FreezePaddle();
-        DisplayAalytics();
+        //DisplayAalytics();
+    }
+
+    public string GetMaxTime()
+    {
+        sessionTimes.Sort();
+        return sessionTimes[sessionTimes.Count - 1].ToString("0.0");
+    }
+
+    public string GetAvgTime()
+    {
+        float avgTime = sessionTimes.Aggregate((x, y) => x + y) / sessionTimes.Count;
+        return avgTime.ToString("0.0");
+    }
+
+    public string GetScore()
+    {
+        return score.ToString();
+    }
+
+    public string GetLives()
+    {
+        return lives.ToString();
     }
 
     private void DisplayAalytics()
