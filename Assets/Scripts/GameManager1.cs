@@ -24,13 +24,13 @@ public class GameManager1 : MonoBehaviour
     //public Brick[] bricks { get; private set; }
 
     [SerializeField]
-    TMP_Text Score;
+    TextMesh Score;
 
     [SerializeField]
-    TMP_Text AirTime;
+    TextMesh AirTime;
 
     [SerializeField]
-    TMP_Text Lives;    
+    TextMesh Lives;    
 
     [SerializeField]
     Transform leftWall;
@@ -64,7 +64,7 @@ public class GameManager1 : MonoBehaviour
         }
 
         sessionTime += Time.deltaTime;
-        AirTime.text = "Time: " + sessionTime.ToString("0.0");
+        AirTime.text = sessionTime.ToString("0.0");
     }
 
     private void Start()
@@ -77,8 +77,8 @@ public class GameManager1 : MonoBehaviour
         this.score = 0;
         this.lives = 3;
 
-        Score.text = "Score: ";
-        Lives.text = "Lives: " + lives.ToString();
+        Score.text = score.ToString();
+        Lives.text = lives.ToString();
 
     }
 
@@ -92,7 +92,7 @@ public class GameManager1 : MonoBehaviour
     {
         this.lives--;
         recordTime = false;
-        Lives.text = "Lives: " + lives;
+        Lives.text = lives.ToString();
 
         if (this.lives > 0) {
             ResetLevel();
@@ -121,6 +121,7 @@ public class GameManager1 : MonoBehaviour
         sessionTime = 0f;
         gameOverPanel.SetActive(true);
         paddle.FreezePaddle();
+        GetComponent<AudioSource>().Stop();
         //DisplayAalytics();
     }
 
@@ -167,7 +168,7 @@ public class GameManager1 : MonoBehaviour
     public void Hit()
     {
         this.score += 100;
-        Score.text = "Score: " + score.ToString();
+        Score.text = score.ToString();
     }
 
     public float GetRandomXPosition()

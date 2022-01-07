@@ -4,30 +4,45 @@ using UnityEngine;
 
 public class AspectRatioForcer : MonoBehaviour
 {
+    // set the desired aspect ratio (the values in this example are
+    // hard-coded for 16:9, but you could make them into public
+    // variables instead so you can set them at design time)
+    float targetaspect = 1024.0f / 768.0f;
+
+    // determine the game window's current aspect ratio
+
+    float windowaspect;
+
+    // current viewport height should be scaled by this amount
+
+    float scaleheight = 0;
+
+    // obtain camera component so we can modify its viewport
+
+    Camera camera = null;
 
     // Use this for initialization
     void Start()
     {
+        scaleheight = windowaspect / targetaspect;
 
-        // set the desired aspect ratio (the values in this example are
-        // hard-coded for 16:9, but you could make them into public
-        // variables instead so you can set them at design time)
-        float targetaspect = 16.0f / 9.0f;
+        camera = GetComponent<Camera>();
+    }
 
-        // determine the game window's current aspect ratio
+    // Update is called once per frame
+    void Update()
+    {
+        float calScaleheight = (float)Screen.width / (float)Screen.height;
 
-        float windowaspect = (float)Screen.width / (float)Screen.height;
-
-        // current viewport height should be scaled by this amount
-
-        float scaleheight = windowaspect / targetaspect;
-
-        // obtain camera component so we can modify its viewport
-
-        Camera camera = GetComponent<Camera>();
-
-        // if scaled height is less than current height, add letterbox
-
+        if (scaleheight != calScaleheight)
+        {
+            scaleheight = calScaleheight;
+            UpdateCameraRect(scaleheight);        
+        }
+    }
+    
+    void UpdateCameraRect(float scaleheight)
+    {
         if (scaleheight < 1.0f)
         {
             Rect rect = camera.rect;
@@ -54,13 +69,6 @@ public class AspectRatioForcer : MonoBehaviour
             rect.y = 0;
 
             camera.rect = rect;
-
         }
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
     }
 }

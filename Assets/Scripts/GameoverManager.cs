@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.SceneManagement;
+using System;
 
 public class GameoverManager : MonoBehaviour {
 
@@ -16,10 +17,15 @@ public class GameoverManager : MonoBehaviour {
 
 	public AudioClip menuTap;						//touch sound
 
-	private bool canTap;							//prevents double click on buttons
+    private bool canTap;							//prevents double click on buttons
 	private float buttonAnimationSpeed = 9.0f;		//button scale animation speed
 
     private void OnEnable()
+    {
+        StartCoroutine(EnablePanel());
+    }
+
+    private IEnumerator EnablePanel()
     {
         canTap = true;
         //Set the new score on the screen
@@ -27,8 +33,9 @@ public class GameoverManager : MonoBehaviour {
         AvgTimeText.GetComponent<TextMesh>().text = gameManager.GetAvgTime();
         scoreText.GetComponent<TextMesh>().text = gameManager.GetScore();
         livesText.GetComponent<TextMesh>().text = gameManager.GetLives();
+        yield return new WaitForSeconds(0.5f);
+        GetComponent<AudioSource>().Play();
     }
-
 
     void Update () {	
 		if(canTap)
@@ -74,19 +81,19 @@ public class GameoverManager : MonoBehaviour {
 	}
 	
 	
-	///***********************************************************************
-	/// Save player score
-	///***********************************************************************
-	void saveScore() {
-		//immediately save the last score
-		PlayerPrefs.SetInt("lastScore", PlayerManager.playerScore);
-		//check if this new score is higher than saved bestScore.
-		//if so, save this new score into playerPrefs. otherwise keep the last bestScore intact.
-		int lastBestScore;
-		lastBestScore = PlayerPrefs.GetInt("bestScore");
-		if(PlayerManager.playerScore > lastBestScore)
-			PlayerPrefs.SetInt("bestScore", PlayerManager.playerScore);
-	}
+	/////***********************************************************************
+	///// Save player score
+	/////***********************************************************************
+	//void saveScore() {
+	//	//immediately save the last score
+	//	PlayerPrefs.SetInt("lastScore", PlayerManager.playerScore);
+	//	//check if this new score is higher than saved bestScore.
+	//	//if so, save this new score into playerPrefs. otherwise keep the last bestScore intact.
+	//	int lastBestScore;
+	//	lastBestScore = PlayerPrefs.GetInt("bestScore");
+	//	if(PlayerManager.playerScore > lastBestScore)
+	//		PlayerPrefs.SetInt("bestScore", PlayerManager.playerScore);
+	//}
 	
 	
 	///***********************************************************************
